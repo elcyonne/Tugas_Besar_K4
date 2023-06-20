@@ -1,4 +1,4 @@
-#Workspace - Gibranr
+#Workspace - Gibranr try error
 menu = {
     "Laptop": [],
     "Keyboard": [],
@@ -207,3 +207,4 @@ def main_menu():
             print("Pilihan tidak valid!")
 
 main_menu()
+
