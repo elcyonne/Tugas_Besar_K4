@@ -1,37 +1,46 @@
+#Kelompok 4:
+#Kompyutah - Program Jual Beli Perangkat Komputer
+
 #login
 def login():
-    role = input("Apakah Anda penjual atau pembeli? (P/PB): ")
+    print("===== Selamat Datang di Program Kompyutah =====")
+    print("Anda akan login sebagai:\n1. Administrator\n2. Pembeli\n3. Keluar")
 
+    role = "0"
     max_attempts = 3  # Jumlah maksimal percobaan login
     attempts = 0  # Jumlah percobaan saat ini
 
     while attempts < max_attempts:
-        if role.lower() == "p":
-            username = input("Masukkan username penjual: ")
-            password = input("Masukkan password penjual: ")
+        if role == "0":
+            role = input("Pilihan: ")
+        elif role == "1":
+            username = input("Masukkan username Admin: ")
+            password = input("Masukkan password Admin: ")
 
-            # Cek kecocokan username dan password penjual
-            if username == "admin" and password == "12345":
-                print("Selamat datang, penjual!")
+            # Cek kecocokan username dan password admin
+            if username == "admin" and password == "admin":
+                print("Selamat datang, Admin!")
                 break  # Keluar dari loop jika login berhasil
             else:
-                print("Gagal login sebagai penjual!")
-
-        elif role.lower() == "pb":
-            username = input("Masukkan username pembeli: ")
-            password = input("Masukkan password pembeli: ")
-
-            # Cek kecocokan username dan password pembeli
-            if username == "user" and password == "54321":
-                print("Selamat datang, pembeli!")
-                break  # Keluar dari loop jika login berhasil
-            else:
-                print("Gagal login sebagai pembeli!")
-
+                print("Gagal login sebagai Admin!")
+                attempts += 1  # Tambah jumlah percobaan
+        elif role == "2":
+            nama = input("Masukkan nama Anda: ")
+            print("\nSelamat datang, {nama}!" .format(nama = nama))
+            return nama
+            break
+        elif role == "3":
+            print("Keluar dari program.")
+            break
         else:
-            print("Peran yang dimasukkan tidak valid.")
-
-        attempts += 1  # Tambah jumlah percobaan
+            role = "0"
+            print("Pilihan tidak valid.")
 
     if attempts == max_attempts:
-        print("Anda telah mencapai batas maksimal percobaan. Silakan coba lagi nanti.")
+        print("Anda telah mencapai batas maksimal percobaan.\nProgram akan dihentikan.")
+
+nama = login()
+
+while True:
+    print("\nYa")
+    break
