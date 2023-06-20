@@ -1,0 +1,2 @@
+#workspacefikri
+print("hello word")
