@@ -63,129 +63,94 @@ fan_awal = [["Fan", "Cube_Gaming_Fix_Rainbow_12cm", "47000", "-"], ["Fan", "PCCo
             ["Fan", "Arctic_F12_PWN_PST_12cm", "135000", "-"], ["Fan", "Aerocool_Mirage_12_ARGB_12cm", "146000", "-"]]
 file_produk = ['cpu.txt', 'motherboard.txt', 'cpucooler.txt', 'gpu.txt', 'ram.txt', 'psu.txt', 'storage.txt', 'case.txt', 'fan.txt']
 produk_awal = [cpu_awal, mobo_awal, cpucooler_awal, gpu_awal, ram_awal, psu_awal, storage_awal, case_awal, fan_awal]
+produk = []
 keranjang = []
+jumlah = []
 
 def cek_produk():
     #Cek file produk. Kalau tidak ada, buat file dari komponen tersebut
     import os
-    if (not os.path.exists("./Produk")):
+    if not os.path.exists("./Produk"):
         os.mkdir("./Produk")
-    if (not os.path.exists("./Pembelian")):
+    if not os.path.exists("./Pembelian"):
         os.mkdir("./Pembelian")
     from os.path import exists
     for i in range(len(file_produk)):
         file_exist = exists('./Produk/' + file_produk[i])
-        if (file_exist == False):
+        if file_exist == False:
             with open("./Produk/" + file_produk[i], "w") as txt_file:
                 for line in produk_awal[i]:
                     txt_file.write(" ".join(line) + "\n")
-
-    # file = open("produk.txt", "r")
-    # produk = file.read()
-    # file.close()
-    #
-    # print(produk)
+    #Tambah produk dari masing masing komponen ke array 3D produk
+    for j in range(len(file_produk)):
+        produk.append(ambil_array_produk(j+1))
 
 def ambil_array_produk(komponen):
     #komponen = 1-cpu, 2-motherboard, 3-cpucooler, 4-vga_card, 5-ram, 6-psu, 7-storage, 8-case, 9-fan
     arr = []
-    with open("produk.txt", "r") as file:
+    #Baca file produk dan konversi produk tersebut menjadi array 2D sesuai dengan komponen yang dipilih
+    with open('./Produk/' + file_produk[komponen-1], "r") as file:
         for line in file:
             arr.append(line.split())
+    #Ganti _ menjadi <spasi> di setiap elemen array produk sesuai dengan komponen yang dipilih
+    for i in range(len(arr)):
+        for j in range(len(arr[i])):
+            ganti = arr[i][j].replace("_", " ")
+            arr[i][j] = ganti
     return arr
 
-def tambah_produk(komponen, produk):
+def tambah_produk(komponen, array_produk):
+    #array_produk = ["Komponen", "Nama Produk", "Harga", "Spek Kunci"]
     produk_lama = ambil_array_produk(komponen)
-    produk_lama.append(produk)
-    with open("produk.txt", "w") as txt_file:
+    produk_lama.append(array_produk)
+    # Ganti <spasi> menjadi _ di setiap elemen array produk sesuai dengan komponen yang dipilih
+    for i in range(len(produk_lama)):
+        for j in range(len(produk_lama[i])):
+            ganti = produk_lama[i][j].replace(" ", "_")
+            produk_lama[i][j] = ganti
+    # Tulis produk dari komponen yang dipilih ke file terkait
+    with open('./Produk/' + file_produk[komponen-1], "w") as txt_file:
         for line in produk_lama:
             txt_file.write(" ".join(line) + "\n")
-    file = open("produk.txt", "r")
-    file.read()
-    file.close()
 
-def hapus_produk(nomor):
+def hapus_produk(komponen, nomor):
     #nomor = nomor indeks di array produk
     nomor -= 1
-    produk_lama = ambil_array_produk()
+    produk_lama = ambil_array_produk(komponen)
     produk_lama.pop(nomor)
-    with open("produk.txt", "w") as txt_file:
+    # Ganti <spasi> menjadi _ di setiap elemen array produk sesuai dengan komponen yang dipilih
+    for i in range(len(produk_lama)):
+        for j in range(len(produk_lama[i])):
+            ganti = produk_lama[i][j].replace(" ", "_")
+            produk_lama[i][j] = ganti
+    # Tulis produk dari komponen yang dipilih ke file terkait
+    with open('./Produk/' + file_produk[komponen-1], "w") as txt_file:
         for line in produk_lama:
             txt_file.write(" ".join(line) + "\n")
-    file = open("produk.txt", "r")
-    file.read()
-    file.close()
+
+def jumlah_pembelian(array_jumlah):
+    # Tambahkan kolom jumlah di array keranjang
+    for i in range(len(array_jumlah)):
+        keranjang[i].insert(0, array_jumlah[i])
+
+def konversi_harga():
+    # Ganti tipe data dari harga yang ada di array keranjang menjadi integer
+    for i in range(len(keranjang)):
+        keranjang[i][len(keranjang[i])-2] = int(keranjang[i][len(keranjang[i])-2])
+
+def file_pembelian():
+    # Buat file pembelian berdasarkan keranjang
+    import datetime
+    waktu = datetime.datetime.now()
+    nama_file = nama + " " + str(waktu.year)+"-"+str(waktu.month)+"-"+str(waktu.day)+" "+str(waktu.hour)+"-"+str(waktu.minute)+"-"+str(waktu.second) + ".txt"
+    for i in range(len(keranjang)):
+        keranjang[i][0] = str(keranjang[i][0])
+    with open('./Pembelian/' + nama_file, "w") as txt_file:
+        for line in keranjang:
+            txt_file.write(" ".join(line) + "\n")
+
 
 cek_produk()
-
-# tampilkan_produk()
-# prod = ambil_array_produk()
-# print(prod)
-
-# for i in range(len(cpu_awal[0])):
-#     ganti = cpu_awal[0][i].replace("_", " ")
-#     cpu_awal[0][i] = ganti
-# print(cpu_awal[0])
-
-# produk_awal = [["AMD_Ryzen_3-3200G", "CPU", "1330000", "AM4, DDR4"], ["AMD_Ryzen_5-3400G", "CPU", "3349000", "AM4, DDR4"],
-#                ["AMD_Ryzen_7-3700X", "CPU", "5380000", "AM4, DDR4"]]
-# keranjang = []
-# def baca_produk(ambil = False):
-#     # ambil = False(cuma baca), True(kembalikan isi file produk)
-#     from os.path import exists
-#     file_exist = exists('./produk.txt')
-#
-#     if (file_exist == False):
-#         with open("produk.txt", "w") as txt_file:
-#             for line in produk_awal:
-#                 txt_file.write(" ".join(line) + "\n")
-#
-#     file = open("produk.txt", "r")
-#     produk = file.read()
-#     file.close()
-#     if (ambil == False or ambil == 0):
-#         print(produk)
-#     else:
-#         return produk
-#
-# def ambil_array_produk():
-#     arr = []
-#     with open("produk.txt", "r") as file:
-#         for line in file:
-#             arr.append(line.split())
-#     return arr
-#
-# def tambah_produk(array):
-#     produk_lama = ambil_array_produk()
-#     produk_lama.append(array)
-#     with open("produk.txt", "w") as txt_file:
-#         for line in produk_lama:
-#             txt_file.write(" ".join(line) + "\n")
-#     file = open("produk.txt", "r")
-#     file.read()
-#     file.close()
-#
-# def hapus_produk(nomor):
-#     #nomor = nomor indeks di array produk
-#     nomor -= 1
-#     produk_lama = ambil_array_produk()
-#     produk_lama.pop(nomor)
-#     with open("produk.txt", "w") as txt_file:
-#         for line in produk_lama:
-#             txt_file.write(" ".join(line) + "\n")
-#     file = open("produk.txt", "r")
-#     file.read()
-#     file.close()
-#
-# baca_produk()
-# prod = ambil_array_produk()
-# print(prod)
-
-# prod_baru = ['Produk-C', '300', 'Kategori-C', 'Tipe-A']
-# tambah_produk(prod_baru)
-# prod = ambil_array_produk()
-# print(prod)
-
-# hapus_produk(3)
-# prod = ambil_array_produk()
-# print(prod)
+nama = "test"
+jumlah_pembelian([10])
+file_pembelian()
