@@ -1,6 +1,7 @@
-#Kelompok 4:
+#Kelompok 4: POLARIS
 #Kompyuta - Program Jual Beli Perangkat Komputer dan Perakitan Komputer
 
+# Prosedur & Fungsi
 def login():
     print("===== Selamat Datang di Program Kompyuta =====")
     print("Anda akan login sebagai:\n1. Administrator\n2. Pembeli\n3. Keluar")
@@ -126,7 +127,7 @@ def file_pembelian():
         for line in keranjang:
             txt_file.write(" ".join(line) + "\n")
 
-
+# Variabel & Array
 cpu_awal = [["CPU", "AMD_Ryzen_3-3200G", "1330000", "AM4,_DDR4"], ["CPU", "AMD_Ryzen_5-3400G", "3349000", "AM4,_DDR4"],
             ["CPU", "AMD_Ryzen_7-3700X", "5380000", "AM4,_DDR4"], ["CPU", "AMD_Ryzen_9-3900X", "8222000", "AM4,_DDR4"],
             ["CPU", "AMD_Ryzen_5-5600G", "2099000", "AM4,_DDR4"], ["CPU", "AMD_Ryzen_7-5700G", "3224000", "AM4,_DDR4"],
@@ -193,9 +194,11 @@ produk = []
 keranjang = []
 jumlah = []
 
+# Perintah 1x pakai
 nama = login()
 cek_produk()
 
+# Peritah selama program berjalan
 while True:
     clear()
     print("\nCek")
