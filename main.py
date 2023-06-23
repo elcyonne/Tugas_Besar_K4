@@ -127,6 +127,11 @@ def file_pembelian():
         for line in keranjang:
             txt_file.write(" ".join(line) + "\n")
 
+def tampilkan_daftar_produk(komponen):
+    print(f"Daftar {produk[komponen-1][0][0]}:")
+    for i in range(len(produk[komponen-1])):
+        print(f"{i+1}. {produk[komponen-1][i][0]} - {produk[komponen-1][i][1]} - Rp.{produk[komponen-1][i][2]} - {produk[komponen-1][i][3]}")
+
 # Variabel & Array
 cpu_awal = [["CPU", "AMD_Ryzen_3-3200G", "1330000", "AM4,_DDR4"], ["CPU", "AMD_Ryzen_5-3400G", "3349000", "AM4,_DDR4"],
             ["CPU", "AMD_Ryzen_7-3700X", "5380000", "AM4,_DDR4"], ["CPU", "AMD_Ryzen_9-3900X", "8222000", "AM4,_DDR4"],
@@ -193,13 +198,54 @@ produk_awal = [cpu_awal, mobo_awal, cpucooler_awal, gpu_awal, ram_awal, psu_awal
 produk = []
 keranjang = []
 jumlah = []
+nama_komponen = ['CPU', "Motherboard", "CPU Cooler", "VGA Card", "RAM", "PSU", "Storage", "Case", "Fan"]
+
 
 # Perintah 1x pakai
 nama = login()
 cek_produk()
 
 # Peritah selama program berjalan
-while True:
-    clear()
-    print("\nCek")
-    break
+if nama == "1":
+    while True:
+        print("=== Menu Penjual ===")
+        print("1. Tampilkan Daftar Produk")
+        print("2. Tambah Produk")
+        print("3. Hapus Produk")
+        print("4. Kembali")
+        pilihan_menu = input("Masukkan Pilihan: ")
+
+        if pilihan_menu == "1":
+            print(
+                "===Pilih komponen yang akan ditampilkan==="
+                "\n1. CPU"
+                "\n2. Motherboard"
+                "\n3. CPU Cooler"
+                "\n4. VGA Card"
+                "\n5. RAM"
+                "\n6. PSU"
+                "\n7. Storage"
+                "\n8. Case"
+                "\n9. Fan"
+            )
+            pilihan_komponen = int(input("Masukkan Pilihan: "))
+            tampilkan_daftar_produk(pilihan_komponen)
+        elif pilihan_menu == "2":
+            print(
+                "===Pilih komponen yang akan ditambahkan==="
+                "\n1. CPU"
+                "\n2. Motherboard"
+                "\n3. CPU Cooler"
+                "\n4. VGA Card"
+                "\n5. RAM"
+                "\n6. PSU"
+                "\n7. Storage"
+                "\n8. Case"
+                "\n9. Fan"
+            )
+            input_komponen = int(input("Masukkan Pilihan: "))
+            input_namap = input("Masukkan Nama Produk: ")
+            input_harga = input("Masukkan Harga: ")
+            input_spek = input("Masukkan Spesifikasi Kunci: ")
+            produk_baru = [nama_komponen[input_komponen-1], input_namap, input_harga, input_spek]
+            tambah_produk(input_komponen, produk_baru)
