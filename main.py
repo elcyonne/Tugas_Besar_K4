@@ -3,6 +3,8 @@
 
 # Prosedur & Fungsi
 import os
+
+
 def clear():
     if os.name == 'nt':
         os.system('cls')
@@ -16,7 +18,7 @@ def login():
 
     role = "0"
     max_attempts = 3  # Jumlah maksimal percobaan login
-    attempts = 0  # Jumlah percobaan saat ini
+    attempts = 0      # Jumlah percobaan saat ini
 
     while attempts < max_attempts:
         if role == "0":
@@ -28,10 +30,10 @@ def login():
             # Cek kecocokan username dan password admin
             if username == "admin" and password == "admin":
                 print("Selamat datang, Admin!")
-                return role  # Keluar dari loop jika login berhasil
+                return role         # Keluar dari loop jika login berhasil
             else:
                 print("Gagal login sebagai Admin!")
-                attempts += 1  # Tambah jumlah percobaan
+                attempts += 1       # Tambah jumlah percobaan
         elif role == "2":
             nama = input("Masukkan nama Anda: ")
             print("\nSelamat datang, {nama}!".format(nama=nama))
@@ -66,24 +68,43 @@ def cek_produk():
         produk.append(ambil_array_produk(j + 1))
 
 
-def ambil_array_produk(komponen):
+def ambil_array_produk(komponen, sumber_file=True):
     # komponen = 1-cpu, 2-motherboard, 3-cpucooler, 4-vga_card, 5-ram, 6-psu, 7-storage, 8-case, 9-fan
     arr = []
-    # Baca file produk dan konversi produk tersebut menjadi array 2D sesuai dengan komponen yang dipilih
-    with open('./Produk/' + file_produk[komponen - 1], "r") as file:
-        for line in file:
-            arr.append(line.split())
-    # Ganti _ menjadi <spasi> di setiap elemen array produk sesuai dengan komponen yang dipilih
-    for i in range(len(arr)):
-        for j in range(len(arr[i])):
-            ganti = arr[i][j].replace("_", " ")
-            arr[i][j] = ganti
+    if sumber_file:
+        # Baca file produk dan konversi produk tersebut menjadi array 2D sesuai dengan komponen yang dipilih
+        with open('./Produk/' + file_produk[komponen-1], "r") as file:
+            for line in file:
+                arr.append(line.split())
+        # Ganti _ menjadi <spasi> di setiap elemen array produk sesuai dengan komponen yang dipilih
+        for i in range(len(arr)):
+            for j in range(len(arr[i])):
+                ganti = arr[i][j].replace("_", " ")
+                arr[i][j] = ganti
+    else:
+        # Baca produk dari array 3D produk
+        arr = produk[komponen - 1]
     return arr
+
+
+def tulis_produk(komponen):
+    # Tulis produk dari komponen terkait ke file dari komponen tersebut
+    # array_produk = ["Komponen", "Nama Produk", "Harga", "Spek Kunci"]
+    produk_lama = produk[komponen-1]
+    # Ganti <spasi> menjadi _ di setiap elemen array produk sesuai dengan komponen yang dipilih
+    for i in range(len(produk_lama)):
+        for j in range(len(produk_lama[i])):
+            ganti = produk_lama[i][j].replace(" ", "_")
+            produk_lama[i][j] = ganti
+    # Tulis produk dari komponen yang dipilih ke file terkait
+    with open('./Produk/' + file_produk[komponen-1], "w") as txt_file:
+        for line in produk_lama:
+            txt_file.write(" ".join(line) + "\n")
 
 
 def tambah_produk(komponen, array_produk):
     # array_produk = ["Komponen", "Nama Produk", "Harga", "Spek Kunci"]
-    produk_lama = ambil_array_produk(komponen)
+    produk_lama = ambil_array_produk(komponen, False)
     produk_lama.append(array_produk)
     # Ganti <spasi> menjadi _ di setiap elemen array produk sesuai dengan komponen yang dipilih
     for i in range(len(produk_lama)):
@@ -95,13 +116,13 @@ def tambah_produk(komponen, array_produk):
         for line in produk_lama:
             txt_file.write(" ".join(line) + "\n")
     # Ganti array 2D komponen terkait dengan yang sudah diperbarui
-    produk[komponen - 1] = ambil_array_produk(komponen)
+    produk[komponen - 1] = ambil_array_produk(komponen, False)
 
 
 def hapus_produk(komponen, nomor):
     # nomor = nomor indeks di array produk
     nomor -= 1
-    produk_lama = ambil_array_produk(komponen)
+    produk_lama = ambil_array_produk(komponen, False)
     produk_lama.pop(nomor)
     # Ganti <spasi> menjadi _ di setiap elemen array produk sesuai dengan komponen yang dipilih
     for i in range(len(produk_lama)):
@@ -113,7 +134,7 @@ def hapus_produk(komponen, nomor):
         for line in produk_lama:
             txt_file.write(" ".join(line) + "\n")
     # Ganti array 2D komponen terkait dengan yang sudah diperbarui
-    produk[komponen - 1] = ambil_array_produk(komponen)
+    produk[komponen - 1] = ambil_array_produk(komponen, False)
 
 
 def jumlah_pembelian(array_jumlah):
@@ -147,6 +168,71 @@ def tampilkan_daftar_produk(komponen):
         print(
             f"{i + 1}. {produk[komponen - 1][i][0]} - {produk[komponen - 1][i][1]} - Rp.{produk[komponen - 1][i][2]} - "
             f"{produk[komponen - 1][i][3]}")
+
+
+def urutkan_produk(komponen, indeks_kolom, descending=False):
+    # Urutkan produk dari komponen terkait berdasarkan kolom yang dipilih
+    # indeks_kolom = 1-Nama produk, 2-Harga, 3-Spek_kunci
+    arr = produk[komponen - 1]
+    if indeks_kolom == 2:
+        for i in range(len(arr)):
+            arr[i][2] = int(arr[i][2])
+        sorted_arr = sorted(arr, key=lambda x: x[indeks_kolom], reverse=descending)
+        for j in range(len(arr)):
+            arr[j][2] = str(arr[j][2])
+    else:
+        sorted_arr = sorted(arr, key=lambda x: x[indeks_kolom], reverse=descending)
+    produk[komponen - 1] = sorted_arr
+    tulis_produk(komponen)
+
+
+def cari_produk(kunci):
+    # Cari produk dengan kata kunci dan mengembalikan hasilnya dengan array 2D jika ada, -1 jika tidak ada
+    # kunci = string kata yang ingin dicari
+    hasil = []
+    for i in range(len(produk)):
+        for j in range(len(produk[i])):
+            for k in range(len(produk[i][j])):
+                kata = produk[i][j][k].lower()
+                valid = kata.find(kunci)
+                if valid != -1:
+                    if len(hasil) == 0:
+                        hasil.append(produk[i][j])
+                    else:
+                        if hasil[len(hasil)-1] != produk[i][j]:
+                            hasil.append(produk[i][j])
+    if len(hasil) == 0:
+        return -1
+    else:
+        return hasil
+
+
+def tampilkan_keranjang():
+    for i in range(len(keranjang)):
+        print(f"{i + 1}. {keranjang[i][0]} - {keranjang[i][1]} - Rp.{keranjang[i][2]} - {keranjang[i][3]}")
+
+
+def checkout():
+    # Tampilkan produk yang ada di keranjang, kemudian buat file pembelian atau kembali ke menu pembeli
+    for i in range(len(keranjang)):
+        keranjang[i][0] = str(keranjang[i][0])
+    tampilkan_keranjang()
+    print("Anda akan membeli produk di atas. Apakah Anda sudah yakin?"
+          "\n1. Ya"
+          "\n2. Tidak")
+    pilihan = "0"
+    while pilihan != "1" or pilihan != "2":
+        pilihan = input("Masukkan pilihan: ")
+        if pilihan == "1":
+            file_pembelian()
+            print("File pembelian berhasil dibuat!")
+            break
+        elif pilihan == "2":
+            print("Kembali ke menu pembelian.")
+            break
+        else:
+            print("Input tidak valid.")
+            pilihan = "0"
 
 
 # Variabel & Array
