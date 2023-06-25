@@ -112,6 +112,8 @@ def tambah_produk(komponen, array_produk):
     with open('./Produk/' + file_produk[komponen-1], "w") as txt_file:
         for line in produk_lama:
             txt_file.write(" ".join(line) + "\n")
+    # Ganti array 2D komponen terkait dengan yang sudah diperbarui
+    produk[komponen-1] = ambil_array_produk(komponen)
 
 def hapus_produk(komponen, nomor):
     #nomor = nomor indeks di array produk
@@ -127,6 +129,8 @@ def hapus_produk(komponen, nomor):
     with open('./Produk/' + file_produk[komponen-1], "w") as txt_file:
         for line in produk_lama:
             txt_file.write(" ".join(line) + "\n")
+    # Ganti array 2D komponen terkait dengan yang sudah diperbarui
+    produk[komponen - 1] = ambil_array_produk(komponen)
 
 def jumlah_pembelian(array_jumlah):
     # Tambahkan kolom jumlah di array keranjang
