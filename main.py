@@ -355,48 +355,91 @@ nama = login()
 cek_produk()
 
 # Peritah selama program berjalan
-if nama == "1":
-    while True:
-        print("=== Menu Penjual ===")
-        print("1. Tampilkan Daftar Produk")
-        print("2. Tambah Produk")
-        print("3. Hapus Produk")
-        print("4. Urutkan Produk")
-        print("5. Cari Produk")
-        print("6. Kembali")
-        pilihan_menu = input("Masukkan Pilihan: ")
+while True:
+    if nama == "0":
+        nama = login()
+    elif nama == "1":
+        while True:
+            print("=== Menu Penjual ===")
+            print("1. Tampilkan Daftar Produk")
+            print("2. Tambah Produk")
+            print("3. Hapus Produk")
+            print("4. Urutkan Produk")
+            print("5. Cari Produk")
+            print("6. Kembali")
+            pilihan_menu = input("Masukkan Pilihan: ")
 
-        if pilihan_menu == "1":
-            print(
-                "===Pilih komponen yang akan ditampilkan==="
-                "\n1. CPU"
-                "\n2. Motherboard"
-                "\n3. CPU Cooler"
-                "\n4. VGA Card"
-                "\n5. RAM"
-                "\n6. PSU"
-                "\n7. Storage"
-                "\n8. Case"
-                "\n9. Fan"
-            )
-            pilihan_komponen = int(input("Masukkan Pilihan: "))
-            tampilkan_daftar_produk(pilihan_komponen)
-        elif pilihan_menu == "2":
-            print(
-                "===Pilih komponen yang akan ditambahkan==="
-                "\n1. CPU"
-                "\n2. Motherboard"
-                "\n3. CPU Cooler"
-                "\n4. VGA Card"
-                "\n5. RAM"
-                "\n6. PSU"
-                "\n7. Storage"
-                "\n8. Case"
-                "\n9. Fan"
-            )
-            input_komponen = int(input("Masukkan Pilihan: "))
-            input_namap = input("Masukkan Nama Produk: ")
-            input_harga = input("Masukkan Harga: ")
-            input_spek = input("Masukkan Spesifikasi Kunci: ")
-            produk_baru = [nama_komponen[input_komponen - 1], input_namap, input_harga, input_spek]
-            tambah_produk(input_komponen, produk_baru)
+            if pilihan_menu == "0":
+                print("=== Menu Penjual ===")
+                print("1. Tampilkan Daftar Produk")
+                print("2. Tambah Produk")
+                print("3. Hapus Produk")
+                print("4. Urutkan Produk")
+                print("5. Cari Produk")
+                print("6. Kembali")
+                pilihan_menu = input("Masukkan Pilihan: ")
+            elif pilihan_menu == "1":
+                print(
+                    "===Pilih komponen yang akan ditampilkan==="
+                    "\n1. CPU"
+                    "\n2. Motherboard"
+                    "\n3. CPU Cooler"
+                    "\n4. VGA Card"
+                    "\n5. RAM"
+                    "\n6. PSU"
+                    "\n7. Storage"
+                    "\n8. Case"
+                    "\n9. Fan"
+                    "\n0. Kembali"
+                )
+                pilihan_komponen = int(input("Masukkan Pilihan: "))
+                if int(pilihan_komponen) >= 1 and int(pilihan_komponen) <= 9:
+                    tampilkan_daftar_produk(pilihan_komponen)
+                else:
+                    pilihan_menu = "0"
+            elif pilihan_menu == "2":
+                print(
+                    "===Pilih komponen yang akan ditambahkan==="
+                    "\n1. CPU"
+                    "\n2. Motherboard"
+                    "\n3. CPU Cooler"
+                    "\n4. VGA Card"
+                    "\n5. RAM"
+                    "\n6. PSU"
+                    "\n7. Storage"
+                    "\n8. Case"
+                    "\n9. Fan"
+                    "\n0. Kembali"
+                )
+                input_komponen = int(input("Masukkan Pilihan: "))
+                if int(input_komponen) >= 1 and int(input_komponen) <= 9:
+                    input_namap = input("Masukkan Nama Produk: ")
+                    input_harga = input("Masukkan Harga: ")
+                    input_spek = input("Masukkan Spesifikasi Kunci: ")
+                    produk_baru = [nama_komponen[input_komponen - 1], input_namap, input_harga, input_spek]
+                    tambah_produk(input_komponen, produk_baru)
+                else:
+                    pilihan_menu = "0"
+            elif pilihan_menu == "3":
+                print(
+                    "===Pilih komponen yang akan dihapus==="
+                    "\n1. CPU"
+                    "\n2. Motherboard"
+                    "\n3. CPU Cooler"
+                    "\n4. VGA Card"
+                    "\n5. RAM"
+                    "\n6. PSU"
+                    "\n7. Storage"
+                    "\n8. Case"
+                    "\n9. Fan"
+                    "\n0. Kembali"
+                )
+                input_komponen = int(input("Masukkan Pilihan: "))
+                if int(input_komponen) >= 1 and int(input_komponen) <= 9:
+                    tampilkan_daftar_produk(input_komponen)
+                    input_hapus = int(input("Masukkan Nomor Produk: "))
+                    hapus_produk(input_komponen, input_hapus)
+                else:
+                    pilihan_menu = "0"
+            elif pilihan_menu == "6":
+                nama = login()
