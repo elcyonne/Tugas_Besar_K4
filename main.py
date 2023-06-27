@@ -441,5 +441,45 @@ while True:
                     hapus_produk(input_komponen, input_hapus)
                 else:
                     pilihan_menu = "0"
+            elif pilihan_menu == "4":
+                print(
+                    "===Pilih komponen yang akan diurutkan==="
+                    "\n1. CPU"
+                    "\n2. Motherboard"
+                    "\n3. CPU Cooler"
+                    "\n4. VGA Card"
+                    "\n5. RAM"
+                    "\n6. PSU"
+                    "\n7. Storage"
+                    "\n8. Case"
+                    "\n9. Fan"
+                    "\n0. Kembali"
+                )
+                input_komponen = int(input("Masukkan Pilihan: "))
+                if int(input_komponen) >= 1 and int(input_komponen) <= 9:
+                    print("Urutkan berdasarkan :"
+                          "\n1. Nama produk (A-Z)"
+                          "\n2. Nama produk (Z-A)"
+                          "\n3. Harga terendah"
+                          "\n4. Harga tertinggi"
+                          "\n5. Spek kunci (A-Z)"
+                          "\n6. Spek kunci (Z-A)")
+                    input_urutan = input("Masukan pilihan : ")
+                    if input_urutan == "1":
+                        urutkan_produk(input_komponen, 1, False)
+                    elif input_urutan == "2":
+                        urutkan_produk(input_komponen, 1, True)
+                    elif input_urutan == "3":
+                        urutkan_produk(input_komponen, 2, False)
+                    elif input_urutan == "4":
+                        urutkan_produk(input_komponen, 2, True)
+                    elif input_urutan == "5":
+                        urutkan_produk(input_komponen, 3, False)
+                    elif input_urutan == "6":
+                        urutkan_produk(input_komponen, 3, True)
+                    else:
+                        input_urutan = input("Masukan pilihan : ")
+                else:
+                    pilihan_menu = "0"
             elif pilihan_menu == "6":
                 nama = login()
