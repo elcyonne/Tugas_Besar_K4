@@ -170,7 +170,7 @@ def file_pembelian():
         for line in keranjang:
             txt_file.write(" ".join(line) + "\n")
 
-def urutkan_produk(komponen, indeks_kolom, descending=False):
+def urutkan_produk(komponen, indeks_kolom, descending=False, admin=True):
     # Urutkan produk dari komponen terkait berdasarkan kolom yang dipilih
     # indeks_kolom = 1-Nama produk, 2-Harga, 3-Spek_kunci
     arr = produk[komponen - 1]
@@ -183,7 +183,8 @@ def urutkan_produk(komponen, indeks_kolom, descending=False):
     else:
         sorted_arr = sorted(arr, key=lambda x: x[indeks_kolom], reverse=descending)
     produk[komponen - 1] = sorted_arr
-    tulis_produk(komponen)
+    if admin:
+        tulis_produk(komponen)
 
 def cari_produk(kunci):
     # Cari produk dengan kata kunci dan mengembalikan hasilnya dengan array 2D jika ada, -1 jika tidak ada
@@ -206,8 +207,15 @@ def cari_produk(kunci):
         return hasil
 
 def tampilkan_keranjang():
-    for i in range(len(keranjang)):
-        print(f"{i + 1}. {keranjang[i][0]} - {keranjang[i][1]} - Rp.{keranjang[i][2]} - {keranjang[i][3]}")
+    if len(keranjang) > 0:
+        for i in range(len(keranjang)):
+            if len(keranjang[i]) == 4:
+                print(f"{i + 1}. {keranjang[i][0]} {keranjang[i][1]} - Rp.{keranjang[i][2]} - {keranjang[i][3]}")
+            else:
+                print(f"{i + 1}. {keranjang[i][0]} {keranjang[i][1]} {keranjang[i][2]} - Rp.{keranjang[i][3]} - "
+                      f"{keranjang[i][4]}")
+    else:
+        print("Keranjang Anda masih kosong.")
 
 def checkout():
     # Tampilkan produk yang ada di keranjang, kemudian buat file pembelian atau kembali ke menu pembeli

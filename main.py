@@ -40,7 +40,7 @@ def login():
             return nama
         elif role == "3":
             print("Keluar dari program.")
-            break
+            return "keluar"
         else:
             role = "0"
             print("Pilihan tidak valid.")
@@ -162,15 +162,21 @@ def file_pembelian():
             txt_file.write(" ".join(line) + "\n")
 
 
-def tampilkan_daftar_produk(komponen):
-    print(f"Daftar {produk[komponen - 1][0][0]}:")
-    for i in range(len(produk[komponen - 1])):
-        print(
-            f"{i + 1}. {produk[komponen - 1][i][0]} - {produk[komponen - 1][i][1]} - Rp.{produk[komponen - 1][i][2]} - "
-            f"{produk[komponen - 1][i][3]}")
+def tampilkan_daftar_produk(komponen, custom=False):
+    # komponen = nomor_komponen (custom = array 2D)
+    if custom:
+        for i in range(len(komponen)):
+            print(
+                f"{i + 1}. {komponen[i][0]} - {komponen[i][1]} - Rp.{komponen[i][2]} - {komponen[i][3]}")
+    else:
+        print(f"Daftar {produk[komponen - 1][0][0]}:")
+        for i in range(len(produk[komponen - 1])):
+            print(
+                f"{i + 1}. {produk[komponen - 1][i][0]} - {produk[komponen - 1][i][1]} - "
+                f"Rp.{produk[komponen - 1][i][2]} - {produk[komponen - 1][i][3]}")
 
 
-def urutkan_produk(komponen, indeks_kolom, descending=False):
+def urutkan_produk(komponen, indeks_kolom, descending=False, admin=True):
     # Urutkan produk dari komponen terkait berdasarkan kolom yang dipilih
     # indeks_kolom = 1-Nama produk, 2-Harga, 3-Spek_kunci
     arr = produk[komponen - 1]
@@ -183,7 +189,8 @@ def urutkan_produk(komponen, indeks_kolom, descending=False):
     else:
         sorted_arr = sorted(arr, key=lambda x: x[indeks_kolom], reverse=descending)
     produk[komponen - 1] = sorted_arr
-    tulis_produk(komponen)
+    if admin:
+        tulis_produk(komponen)
 
 
 def cari_produk(kunci):
@@ -208,8 +215,15 @@ def cari_produk(kunci):
 
 
 def tampilkan_keranjang():
-    for i in range(len(keranjang)):
-        print(f"{i + 1}. {keranjang[i][0]} - {keranjang[i][1]} - Rp.{keranjang[i][2]} - {keranjang[i][3]}")
+    if len(keranjang) > 0:
+        for i in range(len(keranjang)):
+            if len(keranjang[i]) == 4:
+                print(f"{i + 1}. {keranjang[i][0]} {keranjang[i][1]} - Rp.{keranjang[i][2]} - {keranjang[i][3]}")
+            else:
+                print(f"{i + 1}. {keranjang[i][0]} {keranjang[i][1]} {keranjang[i][2]} - Rp.{keranjang[i][3]} - "
+                      f"{keranjang[i][4]}")
+    else:
+        print("Keranjang Anda masih kosong.")
 
 
 def checkout():
@@ -356,10 +370,17 @@ cek_produk()
 
 # Peritah selama program berjalan
 while True:
-    if nama == "0":
-        nama = login()
-    elif nama == "1":
-        while True:
+    if nama == "1":
+        print("=== Menu Admin ===")
+        print("1. Tampilkan Daftar Produk")
+        print("2. Tambah Produk")
+        print("3. Hapus Produk")
+        print("4. Urutkan Produk")
+        print("5. Cari Produk")
+        print("6. Kembali")
+        pilihan_menu = input("Masukkan Pilihan: ")
+
+        if pilihan_menu == "0":
             print("=== Menu Penjual ===")
             print("1. Tampilkan Daftar Produk")
             print("2. Tambah Produk")
@@ -368,103 +389,127 @@ while True:
             print("5. Cari Produk")
             print("6. Kembali")
             pilihan_menu = input("Masukkan Pilihan: ")
-
-            if pilihan_menu == "0":
-                print("=== Menu Penjual ===")
-                print("1. Tampilkan Daftar Produk")
-                print("2. Tambah Produk")
-                print("3. Hapus Produk")
-                print("4. Urutkan Produk")
-                print("5. Cari Produk")
-                print("6. Kembali")
-                pilihan_menu = input("Masukkan Pilihan: ")
-            elif pilihan_menu == "1":
-                print(
-                    "===Pilih komponen yang akan ditampilkan==="
-                    "\n1. CPU"
-                    "\n2. Motherboard"
-                    "\n3. CPU Cooler"
-                    "\n4. VGA Card"
-                    "\n5. RAM"
-                    "\n6. PSU"
-                    "\n7. Storage"
-                    "\n8. Case"
-                    "\n9. Fan"
-                    "\n0. Kembali"
-                )
+        elif pilihan_menu == "1":
+            print(
+                "=== Pilih komponen yang akan ditampilkan ==="
+                "\n1. CPU"
+                "\n2. Motherboard"
+                "\n3. CPU Cooler"
+                "\n4. VGA Card"
+                "\n5. RAM"
+                "\n6. PSU"
+                "\n7. Storage"
+                "\n8. Case"
+                "\n9. Fan"
+                "\n0. Kembali"
+            )
+            try:
                 pilihan_komponen = int(input("Masukkan Pilihan: "))
-                if int(pilihan_komponen) >= 1 and int(pilihan_komponen) <= 9:
-                    tampilkan_daftar_produk(pilihan_komponen)
-                else:
-                    pilihan_menu = "0"
-            elif pilihan_menu == "2":
-                print(
-                    "===Pilih komponen yang akan ditambahkan==="
-                    "\n1. CPU"
-                    "\n2. Motherboard"
-                    "\n3. CPU Cooler"
-                    "\n4. VGA Card"
-                    "\n5. RAM"
-                    "\n6. PSU"
-                    "\n7. Storage"
-                    "\n8. Case"
-                    "\n9. Fan"
-                    "\n0. Kembali"
-                )
+            except ValueError:
+                print("Pilihan tidak valid.")
+                continue
+            else:
+                tampilkan_daftar_produk(pilihan_komponen)
+        elif pilihan_menu == "2":
+            print(
+                "=== Pilih komponen yang akan ditambahkan ==="
+                "\n1. CPU"
+                "\n2. Motherboard"
+                "\n3. CPU Cooler"
+                "\n4. VGA Card"
+                "\n5. RAM"
+                "\n6. PSU"
+                "\n7. Storage"
+                "\n8. Case"
+                "\n9. Fan"
+                "\n0. Kembali"
+            )
+            try:
                 input_komponen = int(input("Masukkan Pilihan: "))
-                if int(input_komponen) >= 1 and int(input_komponen) <= 9:
+            except ValueError:
+                print("Pilihan tidak valid.")
+                continue
+            else:
+                if 1 <= input_komponen <= 9:
                     input_namap = input("Masukkan Nama Produk: ")
                     input_harga = input("Masukkan Harga: ")
                     input_spek = input("Masukkan Spesifikasi Kunci: ")
                     produk_baru = [nama_komponen[input_komponen - 1], input_namap, input_harga, input_spek]
                     tambah_produk(input_komponen, produk_baru)
+                    print("Produk berhasil ditambahkan.")
                 else:
                     pilihan_menu = "0"
-            elif pilihan_menu == "3":
-                print(
-                    "===Pilih komponen yang akan dihapus==="
-                    "\n1. CPU"
-                    "\n2. Motherboard"
-                    "\n3. CPU Cooler"
-                    "\n4. VGA Card"
-                    "\n5. RAM"
-                    "\n6. PSU"
-                    "\n7. Storage"
-                    "\n8. Case"
-                    "\n9. Fan"
-                    "\n0. Kembali"
-                )
+        elif pilihan_menu == "3":
+            print(
+                "=== Pilih komponen yang akan dihapus ==="
+                "\n1. CPU"
+                "\n2. Motherboard"
+                "\n3. CPU Cooler"
+                "\n4. VGA Card"
+                "\n5. RAM"
+                "\n6. PSU"
+                "\n7. Storage"
+                "\n8. Case"
+                "\n9. Fan"
+                "\n0. Kembali"
+            )
+            try:
                 input_komponen = int(input("Masukkan Pilihan: "))
-                if int(input_komponen) >= 1 and int(input_komponen) <= 9:
+            except ValueError:
+                print("Pilihan tidak valid.")
+                continue
+            else:
+                if 1 <= input_komponen <= 9:
                     tampilkan_daftar_produk(input_komponen)
-                    input_hapus = int(input("Masukkan Nomor Produk: "))
-                    hapus_produk(input_komponen, input_hapus)
+                    try:
+                        input_hapus = int(input("Masukkan Nomor Produk: "))
+                    except ValueError:
+                        print("Pilihan tidak valid.")
+                        continue
+                    else:
+                        if 1 <= input_hapus <= 9:
+                            hapus_produk(input_komponen, input_hapus)
+                            print("Produk berhasil dihapus.")
+                        else:
+                            pilihan_menu = "0"
                 else:
                     pilihan_menu = "0"
-            elif pilihan_menu == "4":
-                print(
-                    "===Pilih komponen yang akan diurutkan==="
-                    "\n1. CPU"
-                    "\n2. Motherboard"
-                    "\n3. CPU Cooler"
-                    "\n4. VGA Card"
-                    "\n5. RAM"
-                    "\n6. PSU"
-                    "\n7. Storage"
-                    "\n8. Case"
-                    "\n9. Fan"
-                    "\n0. Kembali"
-                )
-                input_komponen = int(input("Masukkan Pilihan: "))
-                if int(input_komponen) >= 1 and int(input_komponen) <= 9:
-                    print("Urutkan berdasarkan :"
+        elif pilihan_menu == "4":
+            print(
+                "=== Pilih komponen yang akan diurutkan ==="
+                "\n1. CPU"
+                "\n2. Motherboard"
+                "\n3. CPU Cooler"
+                "\n4. VGA Card"
+                "\n5. RAM"
+                "\n6. PSU"
+                "\n7. Storage"
+                "\n8. Case"
+                "\n9. Fan"
+                "\n0. Kembali"
+            )
+            try:
+                input_komponen = int(input("Masukkan pilihan: "))
+            except ValueError:
+                print("Pilihan tidak valid.")
+                continue
+            else:
+                if 1 <= input_komponen <= 9:
+                    print("Urutkan berdasarkan:"
                           "\n1. Nama produk (A-Z)"
                           "\n2. Nama produk (Z-A)"
                           "\n3. Harga terendah"
                           "\n4. Harga tertinggi"
                           "\n5. Spek kunci (A-Z)"
-                          "\n6. Spek kunci (Z-A)")
-                    input_urutan = input("Masukan pilihan : ")
+                          "\n6. Spek kunci (Z-A)"
+                          "\n0. Kembali")
+                    input_urutan = "-1"
+                    while input_urutan != "0" or input_urutan != "1" or input_urutan != "2" or input_urutan != "3"\
+                            or input_urutan != "4" or input_urutan != "5" or input_urutan != "6":
+                        input_urutan = input("Masukan pilihan: ")
+                        if input_urutan == "0" or input_urutan == "1" or input_urutan == "2" or input_urutan == "3"\
+                                or input_urutan == "4" or input_urutan == "5" or input_urutan == "6":
+                            break
                     if input_urutan == "1":
                         urutkan_produk(input_komponen, 1, False)
                     elif input_urutan == "2":
@@ -478,8 +523,22 @@ while True:
                     elif input_urutan == "6":
                         urutkan_produk(input_komponen, 3, True)
                     else:
-                        input_urutan = input("Masukan pilihan : ")
+                        input_komponen = 0
+                    print("Produk berhasil diurutkan.")
                 else:
                     pilihan_menu = "0"
-            elif pilihan_menu == "6":
-                nama = login()
+        elif pilihan_menu == "6":
+            nama = login()
+    elif nama == "keluar":
+        break
+    else:
+        print("=== Menu Pembeli ==="
+              "\n1. Tampilkan Daftar Produk"
+              "\n2. Tampilkan Keranjang"
+              "\n3. Beli Produk"
+              "\n4. Hapus Pembelian"
+              "\n5. Urutkan Produk"
+              "\n6. Cari Produk"
+              "\n7. Checkout"
+              "\n0. Kembali")
+        pilihan_menu = input("Masukkan Pilihan: ")
