@@ -542,3 +542,89 @@ while True:
               "\n7. Checkout"
               "\n0. Kembali")
         pilihan_menu = input("Masukkan Pilihan: ")
+
+        if pilihan_menu == "0":
+            print("=== Menu Pembeli ==="
+                  "\n1. Tampilkan Daftar Produk"
+                  "\n2. Tampilkan Keranjang"
+                  "\n3. Beli Produk"
+                  "\n4. Hapus Pembelian"
+                  "\n5. Urutkan Produk"
+                  "\n6. Cari Produk"
+                  "\n7. Checkout"
+                  "\n0. Kembali")
+            pilihan_menu = input("Masukkan Pilihan: ")
+        elif pilihan_menu == "1":
+            print(
+                "=== Pilih komponen yang akan ditampilkan ==="
+                "\n1. CPU"
+                "\n2. Motherboard"
+                "\n3. CPU Cooler"
+                "\n4. VGA Card"
+                "\n5. RAM"
+                "\n6. PSU"
+                "\n7. Storage"
+                "\n8. Case"
+                "\n9. Fan"
+                "\n0. Kembali"
+            )
+            try:
+                pilihan_komponen = int(input("Masukkan Pilihan: "))
+            except ValueError:
+                print("Pilihan tidak valid.")
+                continue
+            else:
+                tampilkan_daftar_produk(pilihan_komponen)
+        elif pilihan_menu == "5":
+            print(
+                "=== Pilih komponen yang akan diurutkan ==="
+                "\n1. CPU"
+                "\n2. Motherboard"
+                "\n3. CPU Cooler"
+                "\n4. VGA Card"
+                "\n5. RAM"
+                "\n6. PSU"
+                "\n7. Storage"
+                "\n8. Case"
+                "\n9. Fan"
+                "\n0. Kembali"
+            )
+            try:
+                input_komponen = int(input("Masukkan pilihan: "))
+            except ValueError:
+                print("Pilihan tidak valid.")
+                continue
+            else:
+                if 1 <= input_komponen <= 9:
+                    print("Urutkan berdasarkan:"
+                          "\n1. Nama produk (A-Z)"
+                          "\n2. Nama produk (Z-A)"
+                          "\n3. Harga terendah"
+                          "\n4. Harga tertinggi"
+                          "\n5. Spek kunci (A-Z)"
+                          "\n6. Spek kunci (Z-A)"
+                          "\n0. Kembali")
+                    input_urutan = "-1"
+                    while input_urutan != "0" or input_urutan != "1" or input_urutan != "2" or input_urutan != "3" \
+                            or input_urutan != "4" or input_urutan != "5" or input_urutan != "6":
+                        input_urutan = input("Masukan pilihan: ")
+                        if input_urutan == "0" or input_urutan == "1" or input_urutan == "2" or input_urutan == "3" \
+                                or input_urutan == "4" or input_urutan == "5" or input_urutan == "6":
+                            break
+                    if input_urutan == "1":
+                        urutkan_produk(input_komponen, 1, False, False)
+                    elif input_urutan == "2":
+                        urutkan_produk(input_komponen, 1, True, False)
+                    elif input_urutan == "3":
+                        urutkan_produk(input_komponen, 2, False, False)
+                    elif input_urutan == "4":
+                        urutkan_produk(input_komponen, 2, True, False)
+                    elif input_urutan == "5":
+                        urutkan_produk(input_komponen, 3, False, False)
+                    elif input_urutan == "6":
+                        urutkan_produk(input_komponen, 3, True, False)
+                    else:
+                        input_komponen = 0
+                    print("Produk berhasil diurutkan.")
+                else:
+                    pilihan_menu = "0"
