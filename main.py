@@ -535,8 +535,8 @@ while True:
         print("=== Menu Pembeli ==="
               "\n1. Tampilkan Daftar Produk"
               "\n2. Tampilkan Keranjang"
-              "\n3. Beli Produk"
-              "\n4. Hapus Pembelian"
+              "\n3. Masukkan Keranjang"
+              "\n4. Hapus Keranjang"
               "\n5. Urutkan Produk"
               "\n6. Cari Produk"
               "\n7. Checkout"
@@ -547,8 +547,8 @@ while True:
             print("=== Menu Pembeli ==="
                   "\n1. Tampilkan Daftar Produk"
                   "\n2. Tampilkan Keranjang"
-                  "\n3. Beli Produk"
-                  "\n4. Hapus Pembelian"
+                  "\n3. Masukkan Keranjang"
+                  "\n4. Hapus Keranjang"
                   "\n5. Urutkan Produk"
                   "\n6. Cari Produk"
                   "\n7. Checkout"
@@ -575,6 +575,64 @@ while True:
                 continue
             else:
                 tampilkan_daftar_produk(pilihan_komponen)
+        elif pilihan_menu == "2":
+            tampilkan_keranjang()
+        elif pilihan_menu == "3":
+            print(
+                "=== Pilih komponen yang akan dibeli ==="
+                "\n1. CPU"
+                "\n2. Motherboard"
+                "\n3. CPU Cooler"
+                "\n4. VGA Card"
+                "\n5. RAM"
+                "\n6. PSU"
+                "\n7. Storage"
+                "\n8. Case"
+                "\n9. Fan"
+                "\n0. Kembali"
+            )
+            try:
+                pilihan_komponen = int(input("Masukkan Pilihan: "))
+            except ValueError:
+                print("Pilihan tidak valid.")
+                continue
+            else:
+                if 1 <= pilihan_komponen <= 9:
+                    tampilkan_daftar_produk(pilihan_komponen)
+                    try:
+                        pilihan_produk = int(input("Masukkan Pilihan: "))
+                    except ValueError:
+                        print("Pilihan tidak valid.")
+                        continue
+                    else:
+                        if 1 <= pilihan_produk <= len(produk[pilihan_komponen - 1]):
+                            keranjang.append(produk[pilihan_komponen - 1][pilihan_produk - 1])
+                            try:
+                                jumlah_beli = int(input("Masukkan Jumlah: "))
+                            except ValueError:
+                                print("Jumlah tidak valid.")
+                                continue
+                            else:
+                                jumlah.append(jumlah_beli)
+                                keranjang[len(keranjang)-1].insert(0, jumlah_beli)
+                                print("Produk berhasil ditambahkan ke keranjang.")
+                                pilihan_menu = "0"
+                else:
+                    pilihan_menu = "0"
+        elif pilihan_menu == "4":
+            print("Pilih produk yang akan dihapus dari keranjang:")
+            tampilkan_keranjang()
+            try:
+                pilihan_nomor = int(input("Masukkan Nomor: "))
+            except ValueError:
+                print("Pilihan tidak valid.")
+                continue
+            else:
+                if 1 <= pilihan_nomor <= len(keranjang):
+                    keranjang.pop(pilihan_nomor-1)
+                    print("Produk berhasil dihapus dari keranjang.")
+                else:
+                    pilihan_menu = "0"
         elif pilihan_menu == "5":
             print(
                 "=== Pilih komponen yang akan diurutkan ==="
