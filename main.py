@@ -220,7 +220,7 @@ def tampilkan_keranjang():
             if len(keranjang[i]) == 4:
                 print(f"{i + 1}. {keranjang[i][0]} {keranjang[i][1]} - Rp.{keranjang[i][2]} - {keranjang[i][3]}")
             else:
-                print(f"{i + 1}. {keranjang[i][0]} {keranjang[i][1]} {keranjang[i][2]} - Rp.{keranjang[i][3]} - "
+                print(f"{i + 1}. {keranjang[i][0]} {keranjang[i][1]} {keranjang[i][2]} - @Rp.{keranjang[i][3]} - "
                       f"{keranjang[i][4]}")
     else:
         print("Keranjang Anda masih kosong.")
@@ -381,7 +381,7 @@ while True:
         pilihan_menu = input("Masukkan Pilihan: ")
 
         if pilihan_menu == "0":
-            print("=== Menu Penjual ===")
+            print("=== Menu Admin ===")
             print("1. Tampilkan Daftar Produk")
             print("2. Tambah Produk")
             print("3. Hapus Produk")
@@ -540,7 +540,7 @@ while True:
               "\n5. Urutkan Produk"
               "\n6. Cari Produk"
               "\n7. Checkout"
-              "\n0. Kembali")
+              "\n8. Kembali")
         pilihan_menu = input("Masukkan Pilihan: ")
 
         if pilihan_menu == "0":
@@ -552,7 +552,7 @@ while True:
                   "\n5. Urutkan Produk"
                   "\n6. Cari Produk"
                   "\n7. Checkout"
-                  "\n0. Kembali")
+                  "\n8. Kembali")
             pilihan_menu = input("Masukkan Pilihan: ")
         elif pilihan_menu == "1":
             print(
@@ -606,33 +606,35 @@ while True:
                         continue
                     else:
                         if 1 <= pilihan_produk <= len(produk[pilihan_komponen - 1]):
-                            keranjang.append(produk[pilihan_komponen - 1][pilihan_produk - 1])
                             try:
                                 jumlah_beli = int(input("Masukkan Jumlah: "))
                             except ValueError:
                                 print("Jumlah tidak valid.")
                                 continue
                             else:
-                                jumlah.append(jumlah_beli)
-                                keranjang[len(keranjang)-1].insert(0, jumlah_beli)
+                                masuk_keranjang = produk[pilihan_komponen - 1][pilihan_produk - 1][:]
+                                masuk_keranjang.insert(0, jumlah_beli)
+                                keranjang.append(masuk_keranjang)
                                 print("Produk berhasil ditambahkan ke keranjang.")
                                 pilihan_menu = "0"
                 else:
                     pilihan_menu = "0"
         elif pilihan_menu == "4":
-            print("Pilih produk yang akan dihapus dari keranjang:")
+            if len(keranjang) > 0:
+                print("Pilih produk yang akan dihapus dari keranjang:")
             tampilkan_keranjang()
-            try:
-                pilihan_nomor = int(input("Masukkan Nomor: "))
-            except ValueError:
-                print("Pilihan tidak valid.")
-                continue
-            else:
-                if 1 <= pilihan_nomor <= len(keranjang):
-                    keranjang.pop(pilihan_nomor-1)
-                    print("Produk berhasil dihapus dari keranjang.")
+            if len(keranjang) > 0:
+                try:
+                    pilihan_nomor = int(input("Masukkan Nomor: "))
+                except ValueError:
+                    print("Pilihan tidak valid.")
+                    continue
                 else:
-                    pilihan_menu = "0"
+                    if 1 <= pilihan_nomor <= len(keranjang):
+                        keranjang.pop(pilihan_nomor-1)
+                        print("Produk berhasil dihapus dari keranjang.")
+                    else:
+                        pilihan_menu = "0"
         elif pilihan_menu == "5":
             print(
                 "=== Pilih komponen yang akan diurutkan ==="
@@ -686,3 +688,6 @@ while True:
                     print("Produk berhasil diurutkan.")
                 else:
                     pilihan_menu = "0"
+        elif pilihan_menu == "8":
+            keranjang = []
+            nama = login()
