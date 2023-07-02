@@ -143,10 +143,14 @@ def jumlah_pembelian(array_jumlah):
         keranjang[i].insert(0, array_jumlah[i])
 
 
-def konversi_harga():
-    # Ganti tipe data dari harga yang ada di array keranjang menjadi integer
+def harga_keranjang():
+    # Ganti tipe data dari harga yang ada di array keranjang menjadi integer-string dan hitung harga total
+    total_harga = 0
     for i in range(len(keranjang)):
         keranjang[i][len(keranjang[i]) - 2] = int(keranjang[i][len(keranjang[i]) - 2])
+        total_harga += keranjang[i][0] * keranjang[i][len(keranjang[i]) - 2]
+        keranjang[i][len(keranjang[i]) - 2] = str(keranjang[i][len(keranjang[i]) - 2])
+    return total_harga
 
 
 def file_pembelian():
@@ -160,6 +164,7 @@ def file_pembelian():
     with open('./Pembelian/' + nama_file, "w") as txt_file:
         for line in keranjang:
             txt_file.write(" ".join(line) + "\n")
+    print("File pembelian Anda berhasil dibuat.")
 
 
 def tampilkan_daftar_produk(komponen, custom=False):
@@ -686,6 +691,39 @@ while True:
                     else:
                         input_komponen = 0
                     print("Produk berhasil diurutkan.")
+                else:
+                    pilihan_menu = "0"
+        elif pilihan_menu == "7":
+            tampilkan_keranjang()
+            harga = harga_keranjang()
+            print(f"Total pembelian = Rp.{harga}"
+                  f"\nApakah pembelian Anda sudah benar?"
+                  f"\n1. Ya"
+                  f"\n2. Belum")
+            try:
+                konfirmasi = int(input("Masukkan pilihan : "))
+            except ValueError:
+                print("Pilihan tidak valid.")
+                continue
+            else:
+                if konfirmasi == 1:
+                    print("Apakah Anda ingin menggunakan jasa perakitan kami?"
+                          "\nBiaya dari jasa ini sebesar Rp.100.000"
+                          "\n1. Ya"
+                          "\n2. Tidak")
+                    try:
+                        perakitan = int(input("Masukkan pilihan : "))
+                    except ValueError:
+                        print("Pilihan tidak valid.")
+                        continue
+                    else:
+                        if perakitan == 1:
+                            harga += 100000
+                        for i in range(len(keranjang)):
+                            keranjang[i][0] = str(keranjang[i][0])
+                        keranjang.append(["Total pembelian = Rp." + str(harga)])
+                        file_pembelian()
+                        keranjang = []
                 else:
                     pilihan_menu = "0"
         elif pilihan_menu == "8":
