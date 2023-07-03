@@ -29,24 +29,27 @@ def login():
 
             # Cek kecocokan username dan password admin
             if username == "admin" and password == "admin":
+                clear()
                 print("Selamat datang, Admin!")
                 return role         # Keluar dari loop jika login berhasil
             else:
-                print("Gagal login sebagai Admin!")
+                print("Gagal login sebagai Admin!\n")
                 attempts += 1       # Tambah jumlah percobaan
         elif role == "2":
             nama = input("Masukkan nama Anda: ")
-            print("\nSelamat datang, {nama}!".format(nama=nama))
+            clear()
+            print(f"Selamat datang, {nama}!")
             return nama
         elif role == "3":
             print("Keluar dari program.")
             return "keluar"
         else:
             role = "0"
-            print("Pilihan tidak valid.")
+            print("Pilihan tidak valid.\n")
 
     if attempts == max_attempts:
         print("Anda telah mencapai batas maksimal percobaan.\nProgram akan dihentikan.")
+        return "keluar"
 
 
 def cek_produk():
@@ -100,6 +103,11 @@ def tulis_produk(komponen):
     with open('./Produk/' + file_produk[komponen-1], "w") as txt_file:
         for line in produk_lama:
             txt_file.write(" ".join(line) + "\n")
+    # Ganti _ menjadi <spasi> di setiap elemen array produk sesuai dengan komponen yang dipilih
+    for i in range(len(produk_lama)):
+        for j in range(len(produk_lama[i])):
+            ganti = produk_lama[i][j].replace("_", " ")
+            produk_lama[i][j] = ganti
 
 
 def tambah_produk(komponen, array_produk):
@@ -116,6 +124,10 @@ def tambah_produk(komponen, array_produk):
         for line in produk_lama:
             txt_file.write(" ".join(line) + "\n")
     # Ganti array 2D komponen terkait dengan yang sudah diperbarui
+    for k in range(len(produk[komponen - 1])):
+        for l in range(len(produk[komponen - 1][k])):
+            ganti = produk[komponen - 1][k][l].replace("_", " ")
+            produk[komponen - 1][k][l] = ganti
     produk[komponen - 1] = ambil_array_produk(komponen, False)
 
 
@@ -134,22 +146,20 @@ def hapus_produk(komponen, nomor):
         for line in produk_lama:
             txt_file.write(" ".join(line) + "\n")
     # Ganti array 2D komponen terkait dengan yang sudah diperbarui
+    for k in range(len(produk[komponen - 1])):
+        for l in range(len(produk[komponen - 1][k])):
+            ganti = produk[komponen - 1][k][l].replace("_", " ")
+            produk[komponen - 1][k][l] = ganti
     produk[komponen - 1] = ambil_array_produk(komponen, False)
-
-
-def jumlah_pembelian(array_jumlah):
-    # Tambahkan kolom jumlah di array keranjang
-    for i in range(len(array_jumlah)):
-        keranjang[i].insert(0, array_jumlah[i])
 
 
 def harga_keranjang():
     # Ganti tipe data dari harga yang ada di array keranjang menjadi integer-string dan hitung harga total
     total_harga = 0
     for i in range(len(keranjang)):
-        keranjang[i][len(keranjang[i]) - 2] = int(keranjang[i][len(keranjang[i]) - 2])
-        total_harga += keranjang[i][0] * keranjang[i][len(keranjang[i]) - 2]
-        keranjang[i][len(keranjang[i]) - 2] = str(keranjang[i][len(keranjang[i]) - 2])
+        keranjang[i][3] = int(keranjang[i][3])
+        total_harga += keranjang[i][0] * keranjang[i][3]
+        keranjang[i][3] = str(keranjang[i][3])
     return total_harga
 
 
@@ -164,7 +174,9 @@ def file_pembelian():
     with open('./Pembelian/' + nama_file, "w") as txt_file:
         for line in keranjang:
             txt_file.write(" ".join(line) + "\n")
-    print("File pembelian Anda berhasil dibuat.")
+    clear()
+    print("File pembelian Anda berhasil dibuat."
+          "\nKeranjang dikosongkan kembali.")
 
 
 def tampilkan_daftar_produk(komponen, custom=False):
@@ -229,29 +241,6 @@ def tampilkan_keranjang():
                       f"{keranjang[i][4]}")
     else:
         print("Keranjang Anda masih kosong.")
-
-
-def checkout():
-    # Tampilkan produk yang ada di keranjang, kemudian buat file pembelian atau kembali ke menu pembeli
-    for i in range(len(keranjang)):
-        keranjang[i][0] = str(keranjang[i][0])
-    tampilkan_keranjang()
-    print("Anda akan membeli produk di atas. Apakah Anda sudah yakin?"
-          "\n1. Ya"
-          "\n2. Tidak")
-    pilihan = "0"
-    while pilihan != "1" or pilihan != "2":
-        pilihan = input("Masukkan pilihan: ")
-        if pilihan == "1":
-            file_pembelian()
-            print("File pembelian berhasil dibuat!")
-            break
-        elif pilihan == "2":
-            print("Kembali ke menu pembelian.")
-            break
-        else:
-            print("Input tidak valid.")
-            pilihan = "0"
 
 
 # Variabel & Array
@@ -376,7 +365,7 @@ cek_produk()
 # Peritah selama program berjalan
 while True:
     if nama == "1":
-        print("=== Menu Admin ===")
+        print("\n=== Menu Admin ===")
         print("1. Tampilkan Daftar Produk")
         print("2. Tambah Produk")
         print("3. Hapus Produk")
@@ -386,7 +375,7 @@ while True:
         pilihan_menu = input("Masukkan Pilihan: ")
 
         if pilihan_menu == "0":
-            print("=== Menu Admin ===")
+            print("\n=== Menu Admin ===")
             print("1. Tampilkan Daftar Produk")
             print("2. Tambah Produk")
             print("3. Hapus Produk")
@@ -395,6 +384,7 @@ while True:
             print("6. Kembali")
             pilihan_menu = input("Masukkan Pilihan: ")
         elif pilihan_menu == "1":
+            clear()
             print(
                 "=== Pilih komponen yang akan ditampilkan ==="
                 "\n1. CPU"
@@ -414,8 +404,14 @@ while True:
                 print("Pilihan tidak valid.")
                 continue
             else:
-                tampilkan_daftar_produk(pilihan_komponen)
+                if 1 <= pilihan_komponen <= 9:
+                    clear()
+                    tampilkan_daftar_produk(pilihan_komponen)
+                else:
+                    clear()
+                    pilihan_menu = "0"
         elif pilihan_menu == "2":
+            clear()
             print(
                 "=== Pilih komponen yang akan ditambahkan ==="
                 "\n1. CPU"
@@ -441,10 +437,13 @@ while True:
                     input_spek = input("Masukkan Spesifikasi Kunci: ")
                     produk_baru = [nama_komponen[input_komponen - 1], input_namap, input_harga, input_spek]
                     tambah_produk(input_komponen, produk_baru)
+                    clear()
                     print("Produk berhasil ditambahkan.")
                 else:
+                    clear()
                     pilihan_menu = "0"
         elif pilihan_menu == "3":
+            clear()
             print(
                 "=== Pilih komponen yang akan dihapus ==="
                 "\n1. CPU"
@@ -465,6 +464,7 @@ while True:
                 continue
             else:
                 if 1 <= input_komponen <= 9:
+                    clear()
                     tampilkan_daftar_produk(input_komponen)
                     try:
                         input_hapus = int(input("Masukkan Nomor Produk: "))
@@ -474,12 +474,16 @@ while True:
                     else:
                         if 1 <= input_hapus <= 9:
                             hapus_produk(input_komponen, input_hapus)
+                            clear()
                             print("Produk berhasil dihapus.")
                         else:
+                            clear()
                             pilihan_menu = "0"
                 else:
+                    clear()
                     pilihan_menu = "0"
         elif pilihan_menu == "4":
+            clear()
             print(
                 "=== Pilih komponen yang akan diurutkan ==="
                 "\n1. CPU"
@@ -500,6 +504,7 @@ while True:
                 continue
             else:
                 if 1 <= input_komponen <= 9:
+                    clear()
                     print("Urutkan berdasarkan:"
                           "\n1. Nama produk (A-Z)"
                           "\n2. Nama produk (Z-A)"
@@ -529,15 +534,29 @@ while True:
                         urutkan_produk(input_komponen, 3, True)
                     else:
                         input_komponen = 0
-                    print("Produk berhasil diurutkan.")
+                    clear()
+                    if input_urutan != "0" or input_urutan != "1" or input_urutan != "2" or input_urutan != "3" \
+                            or input_urutan != "4" or input_urutan != "5" or input_urutan != "6":
+                        print("Produk berhasil diurutkan.")
                 else:
+                    clear()
                     pilihan_menu = "0"
+        elif pilihan_menu == "5":
+            cari_kata = input("Masukkan kata kunci: ")
+            ketemu = cari_produk(cari_kata)
+            if ketemu == -1:
+                print("Maaf, produk dengan kata kunci yang Anda cari tidak ada.")
+            else:
+                clear()
+                print(f"Produk dengan kata kunci {cari_kata}:")
+                tampilkan_daftar_produk(ketemu, True)
         elif pilihan_menu == "6":
+            clear()
             nama = login()
     elif nama == "keluar":
         break
     else:
-        print("=== Menu Pembeli ==="
+        print("\n=== Menu Pembeli ==="
               "\n1. Tampilkan Daftar Produk"
               "\n2. Tampilkan Keranjang"
               "\n3. Masukkan Keranjang"
@@ -549,7 +568,7 @@ while True:
         pilihan_menu = input("Masukkan Pilihan: ")
 
         if pilihan_menu == "0":
-            print("=== Menu Pembeli ==="
+            print("\n=== Menu Pembeli ==="
                   "\n1. Tampilkan Daftar Produk"
                   "\n2. Tampilkan Keranjang"
                   "\n3. Masukkan Keranjang"
@@ -560,6 +579,7 @@ while True:
                   "\n8. Kembali")
             pilihan_menu = input("Masukkan Pilihan: ")
         elif pilihan_menu == "1":
+            clear()
             print(
                 "=== Pilih komponen yang akan ditampilkan ==="
                 "\n1. CPU"
@@ -579,10 +599,18 @@ while True:
                 print("Pilihan tidak valid.")
                 continue
             else:
-                tampilkan_daftar_produk(pilihan_komponen)
+                if 1 <= pilihan_komponen <= 9:
+                    clear()
+                    tampilkan_daftar_produk(pilihan_komponen)
+                else:
+                    clear()
+                    pilihan_menu = "0"
         elif pilihan_menu == "2":
+            clear()
+            print("Produk-produk di dalam keranjang:")
             tampilkan_keranjang()
         elif pilihan_menu == "3":
+            clear()
             print(
                 "=== Pilih komponen yang akan dibeli ==="
                 "\n1. CPU"
@@ -603,6 +631,7 @@ while True:
                 continue
             else:
                 if 1 <= pilihan_komponen <= 9:
+                    clear()
                     tampilkan_daftar_produk(pilihan_komponen)
                     try:
                         pilihan_produk = int(input("Masukkan Pilihan: "))
@@ -620,11 +649,17 @@ while True:
                                 masuk_keranjang = produk[pilihan_komponen - 1][pilihan_produk - 1][:]
                                 masuk_keranjang.insert(0, jumlah_beli)
                                 keranjang.append(masuk_keranjang)
+                                clear()
                                 print("Produk berhasil ditambahkan ke keranjang.")
                                 pilihan_menu = "0"
+                        else:
+                            clear()
+                            pilihan_menu = "0"
                 else:
+                    clear()
                     pilihan_menu = "0"
         elif pilihan_menu == "4":
+            clear()
             if len(keranjang) > 0:
                 print("Pilih produk yang akan dihapus dari keranjang:")
             tampilkan_keranjang()
@@ -638,9 +673,12 @@ while True:
                     if 1 <= pilihan_nomor <= len(keranjang):
                         keranjang.pop(pilihan_nomor-1)
                         print("Produk berhasil dihapus dari keranjang.")
+                        clear()
                     else:
+                        clear()
                         pilihan_menu = "0"
         elif pilihan_menu == "5":
+            clear()
             print(
                 "=== Pilih komponen yang akan diurutkan ==="
                 "\n1. CPU"
@@ -661,6 +699,7 @@ while True:
                 continue
             else:
                 if 1 <= input_komponen <= 9:
+                    clear()
                     print("Urutkan berdasarkan:"
                           "\n1. Nama produk (A-Z)"
                           "\n2. Nama produk (Z-A)"
@@ -690,42 +729,67 @@ while True:
                         urutkan_produk(input_komponen, 3, True, False)
                     else:
                         input_komponen = 0
-                    print("Produk berhasil diurutkan.")
+                    clear()
+                    if input_urutan != "0" or input_urutan != "1" or input_urutan != "2" or input_urutan != "3" \
+                            or input_urutan != "4" or input_urutan != "5" or input_urutan != "6":
+                        print("Produk berhasil diurutkan.")
                 else:
+                    clear()
                     pilihan_menu = "0"
+        elif pilihan_menu == "6":
+            cari_kata = input("Masukkan kata kunci: ")
+            ketemu = cari_produk(cari_kata)
+            if ketemu == -1:
+                print("Maaf, produk dengan kata kunci yang Anda cari tidak ada.")
+            else:
+                clear()
+                print(f"Produk dengan kata kunci {cari_kata}:")
+                tampilkan_daftar_produk(ketemu, True)
         elif pilihan_menu == "7":
+            clear()
+            print("Produk-produk yang akan dibeli:")
             tampilkan_keranjang()
             harga = harga_keranjang()
-            print(f"Total pembelian = Rp.{harga}"
-                  f"\nApakah pembelian Anda sudah benar?"
-                  f"\n1. Ya"
-                  f"\n2. Belum")
-            try:
-                konfirmasi = int(input("Masukkan pilihan : "))
-            except ValueError:
-                print("Pilihan tidak valid.")
-                continue
-            else:
-                if konfirmasi == 1:
-                    print("Apakah Anda ingin menggunakan jasa perakitan kami?"
-                          "\nBiaya dari jasa ini sebesar Rp.100.000"
-                          "\n1. Ya"
-                          "\n2. Tidak")
-                    try:
-                        perakitan = int(input("Masukkan pilihan : "))
-                    except ValueError:
-                        print("Pilihan tidak valid.")
-                        continue
-                    else:
-                        if perakitan == 1:
-                            harga += 100000
-                        for i in range(len(keranjang)):
-                            keranjang[i][0] = str(keranjang[i][0])
-                        keranjang.append(["Total pembelian = Rp." + str(harga)])
-                        file_pembelian()
-                        keranjang = []
+            if harga > 0:
+                print(f"Total pembelian = Rp.{harga}"
+                      f"\n\nApakah pembelian Anda sudah benar?"
+                      f"\n1. Ya"
+                      f"\n2. Belum")
+                try:
+                    konfirmasi = int(input("Masukkan pilihan: "))
+                except ValueError:
+                    print("Pilihan tidak valid.")
+                    continue
                 else:
-                    pilihan_menu = "0"
+                    if konfirmasi == 1:
+                        print("\nApakah Anda ingin menggunakan jasa perakitan kami?"
+                              "\nBiaya dari jasa ini adalah sebesar Rp.100,000."
+                              "\n1. Ya"
+                              "\n2. Tidak")
+                        try:
+                            perakitan = int(input("Masukkan pilihan: "))
+                        except ValueError:
+                            print("Pilihan tidak valid.")
+                            continue
+                        else:
+                            if 1 <= perakitan <= 2:
+                                if perakitan == 1:
+                                    harga += 100000
+                                for i in range(len(keranjang)):
+                                    keranjang[i][0] = str(keranjang[i][0])
+                                    keranjang[i][3] = f"@Rp.{int(keranjang[i][3]):,}"
+                                keranjang.append(["Harga total pembelian = Rp." + f"{int(harga):,}"])
+                                if perakitan == 1:
+                                    keranjang.append(["Pakai jasa perakitan"])
+                                file_pembelian()
+                                keranjang = []
+                            else:
+                                clear()
+                                pilihan_menu = "0"
+                    else:
+                        clear()
+                        pilihan_menu = "0"
         elif pilihan_menu == "8":
             keranjang = []
+            clear()
             nama = login()
